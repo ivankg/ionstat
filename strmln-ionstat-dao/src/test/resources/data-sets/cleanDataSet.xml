@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<DEPARTMENT />
+	<DEVICE />
+	<FACILITY />
+	<MEASURE />
+	<MEASURED_VALUE />
+	<MEASUREMENT />
+	<POLICY />
+	<ROLE />
+	<ROOM />
+	<SESSION />
+	<SESSION_TEMPLATE />
+	<SESSION_TEMPLATE_MEASURE />
+	<USER_PROFILE />
+
+</dataset>

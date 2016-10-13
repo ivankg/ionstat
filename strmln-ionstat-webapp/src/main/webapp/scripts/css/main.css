@@ -1,0 +1,83 @@
+/* 
+    Document   : main
+    Created on : May 28, 2013, 8:57:12 PM
+    Author     : ARSA
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body { 
+    margin: 0px;
+    padding: 0px;
+}
+
+#wrapper{
+    width: 980px;
+    margin: 0px auto;
+}
+
+#header{
+  margin:0px;
+  width:800px;
+  height:60px;
+  background-repeat:repeat-x;
+}
+
+#content {
+  width: 980px;
+  margin: 0 auto;
+}
+
+#colOne {
+  float: left;
+  width: 296px;
+/*  margin:0 auto; 
+  background:white; 
+  border:1px solid #999; 
+  width:400px; 
+  padding:20px; 
+  -moz-border-radius:10px;
+  -webkit-border-radius:10px; 
+  overflow:hidden;*/
+}
+
+#colTwo {
+  float: left;
+  width: 676px;
+  height:150px;
+  border: 2px solid red;
+}
+
+/* table */
+#excel
+{
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+width:100%;
+border-collapse:collapse;
+}
+#excel td, #excel th 
+{
+font-size:1.2em;
+border:1px solid #98bf21;
+padding:3px 7px 2px 7px;
+}
+#excel th 
+{
+font-size:1.3em;
+text-align:center;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+}
+
+#excel tr:nth-child(even)
+{
+  color:#000000;
+  background-color:#EAF2D3;
+}
+
+.selected {
+    background-color: #ddd;
+}
+ 

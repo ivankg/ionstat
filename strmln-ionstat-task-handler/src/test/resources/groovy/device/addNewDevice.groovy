@@ -1,0 +1,1 @@
+addNewDeviceCommand = builder.addNewDeviceCommand(parentId: 1L, name:"name1", manufacturer:"manufacturer1", model:"model1", serialNumber:"serialNumber1", deviceUsage:"deviceUsage1")

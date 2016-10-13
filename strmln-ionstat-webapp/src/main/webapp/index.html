@@ -1,0 +1,163 @@
+<!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Ionstat</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" href="scripts/css/style.css" type="text/css" />
+<link rel="stylesheet" href="scripts/css/jquery-ui.css" />
+<script type="text/javascript" src="scripts/lib/jQuery.js"></script>
+<script type="text/javascript" src="scripts/lib/jQuery-ui.js"></script>
+
+<!-- Include the required JavaScript libraries: -->
+<script src='scripts/plugins/dynatree-1.2.4/jquery/jquery.js'
+	type="text/javascript"></script>
+<script src='scripts/plugins/dynatree-1.2.4/jquery/jquery-ui.custom.js'
+	type="text/javascript"></script>
+<script src='scripts/plugins/dynatree-1.2.4/jquery/jquery.cookie.js'
+	type="text/javascript"></script>
+
+<link rel='stylesheet' type='text/css'
+	href='scripts/plugins/dynatree-1.2.4/src/skin/ui.dynatree.css'>
+<script src="scripts/plugins/dynatree-1.2.4/src/jquery.dynatree.js"
+	type="text/javascript"></script>
+
+<!-- Add code to initialize the tree when the document is loaded: -->
+
+<link rel="stylesheet" type="text/css" media="screen"
+	href="scripts/plugins/jqGrid-master/css/jquery-ui.custom.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="scripts/plugins/jqGrid-master/css/ui.jqgrid.css" />
+
+<script src="scripts/plugins/jqGrid-master/js/i18n/grid.locale-en.js"
+	type="text/javascript"></script>
+<script
+	src="scripts/plugins/jqGrid-master/js/minified/jquery.jqGrid.min.js"
+	type="text/javascript"></script>
+
+<!-- Add code to for easyui -->
+
+
+    <link rel="stylesheet" type="text/css" href="scripts/plugins/jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="scripts/plugins/jquery-easyui/themes/icon.css">
+    <script type="text/javascript" src="scripts/plugins/jquery-easyui/jquery.easyui.min.js"></script>
+
+<script type="text/javascript">
+
+</script>
+</head>
+<body>
+
+	<script type="text/javascript">
+        $.extend($.fn.datagrid.methods, {
+            editCell: function(jq,param){
+                return jq.each(function(){
+                    var opts = $('#inputGridUi').datagrid('options');
+                    var fields = $('#inputGridUi').datagrid('getColumnFields',true).concat($(this).datagrid('getColumnFields'));
+                    for(var i=0; i<fields.length; i++){
+                        var col = $('#inputGridUi').datagrid('getColumnOption', fields[i]);
+                        col.editor1 = col.editor;
+                        if (fields[i] != param.field){
+                            col.editor = null;
+                        }
+                    }
+                    $('#inputGridUi').datagrid('beginEdit', param.index);
+                    for(var i=0; i<fields.length; i++){
+                        var col = $('#inputGridUi').datagrid('getColumnOption', fields[i]);
+                        col.editor = col.editor1;
+                    }
+                });
+            }
+        });
+    </script>
+
+	<div id="addSessionDialog">
+		<div id="closeBtn">X</div>
+	</div>
+	<div id="addChildDialog">
+		<!-- <div id="closeBtn_addChildDialog">X</div> -->
+		<div id="headerPanel"></div>
+		<div id="headerText">Use this dialog to add child of selected
+			node.</div>
+		<input type='button' value='OK' id='confirmButton_addChildDialog'>
+		<input type='button' value='Cancel' id='cancelBtn_addChildDialog'>
+	</div>
+	
+	<div id="approveDeclineDialog">
+		<div id="headerPanel"></div>
+		<div id="headerText-approveDecline">Session approval.</div>
+		<input type='button' value='Approve' id='approveButton'>
+		<input type='button' value='Decline' id='declineButton'>
+		<input type='button' value='Cancel' id='cancelApproveDecline'>
+	</div>
+	
+	<div id="addNewSessionDialog">
+		<!-- <div id="closeBtn_addNewSession">X</div> -->
+		<div id='inputGrid'></div>
+		<input type='button' value='OK' id='confirmButton_addNewSession'>
+		<input type='button' value='Cancel' id='cancelBtn_addNewSession'>
+	</div><form id='UploadFileForm' action="#" method="get"></form>
+	
+	<div id="addNewSessionDialogUi"></div>
+	<div id="mask"></div><form id='UploadFileForm' action="#" method="get"></form>
+	<div id="mask"></div>
+	<div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north'" style="height:70%"> 
+        	<div class="easyui-layout" data-options="fit:true">
+        		<div data-options="region:'center',border:false" style="text-align:right;">
+        		</div>
+        		<div data-options="region:'north',border:false" style="text-align:right;padding:5px 0 0;">
+        			<div style='margin-right:5px'>
+					   Ulogovani ste: <a href="http://localhost:8080/ionstat/login.html" id='logout'>Logout</a>
+					</div>
+        		</div>
+        		<div data-options="region:'west',border:false">
+        			<div style="margin-top:1px;margin-left:15px;">
+				        <a href="#" class="easyui-linkbutton" id='addChildButton' data-options="iconCls:'icon-add', hidden:true" onclick="addChildButtonMethod()">Add child</a>
+				        <a href="#" class="easyui-linkbutton" id='addNewSessionButton' data-options="iconCls:'icon-add',hidden:true" onclick="addNewSessionBtnHandler()">Add New Session</a>
+				        <a href="#" class="easyui-linkbutton" id='downloadReportButton' data-options="iconCls:'icon-save',hidden:true" onclick="downloadReport()">Download Report</a>
+				        <a href="#" class="easyui-linkbutton" id='deleteSession' data-options="iconCls:'icon-cancel',hidden:true" onclick="deleteSession()">Delete Session</a>
+				        <a href="#" class="easyui-linkbutton" id='approveDeclineAction' data-options="iconCls:'icon-redo',hidden:true" onclick="approveDeclineBtnHandler()">Approve/Decline</a>
+				    </div>
+	            </div>
+		     </div>
+        </div>
+        
+        <div data-options="region:'south',split:true, resizable:false" style="height:250%;">
+			<div class="easyui-layout" data-options="fit:true">
+	        	<div data-options="region:'west',split:true" title='Data info' style="width:269%;padding:5px">
+	        		<div id='leftBottomPanel'></div>
+	            </div>
+	            <div data-options="region:'center'" title='Recorded values'>
+	            	<div id='previewGridPanelCenter'>
+	            		<div id='recordedGridPreview'></div>
+	            	</div>
+	            </div>
+	            
+	            <div data-options="region:'east',split:true, collapsible:false" style="width:330%;" title='Nominal values'>
+	            	<div id='previewGridPanelEast'>
+						<div id='nominalGridPreview'></div>
+	            	</div>
+	            </div>
+	        </div>
+        </div>
+        <div data-options="region:'west',split:true" title='Facilities' style="width:270%;">
+			<div id="tree"></div>
+		</div>
+        <div data-options="region:'center',title:'Sessions'">
+			<div id="rightPanelEmptyText"></div>
+			<div id="mainGridSessionsDiv">
+				<table id="mainGridSessions"></table>
+			</div>
+        </div>
+    </div>
+	<script type="text/javascript" src="scripts/lib/treePanel.js"></script>
+	<script type="text/javascript" src="scripts/lib/addChildDialog.js"></script>
+	<script type="text/javascript" src="scripts/lib/addNewSessionDialog.js"></script>
+	<script type="text/javascript" src="scripts/lib/downloadReport.js"></script>
+	<script type="text/javascript" src="scripts/lib/previewPanel.js"></script>
+	<script type="text/javascript" src="scripts/lib/localeEn.js"></script>
+	<script type="text/javascript" src="scripts/lib/actions.js"></script>
+	<script type="text/javascript" src="scripts/lib/ApproveDeclineDialog.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	
+	<query name="Department.findDepartmentsByFacilityId">
+		 <![CDATA[
+      	select distinct department
+      		from Department department
+      	where department.facility.facilityId = :facilityId  
+       ]]>
+	</query>
+
+	<query name="Device.findDevicesByRoomId">
+		 <![CDATA[
+      	select distinct device
+      		from Device device
+      	where device.room.roomId = :roomId  
+       ]]>
+	</query>
+
+	<query name="Facility.findUserFacilities">
+		 <![CDATA[
+      	select facility
+      	from UserProfile userProfile
+      		left join userProfile.facilities facility
+      	where userProfile.userProfileId = :userProfileId
+      	  
+       ]]>
+	</query>
+
+	<query name="Room.findRoomsByDepartmentId">
+		 <![CDATA[
+      	select distinct room
+      		from Room room
+      	where room.department.departmentId = :departmentId  
+       ]]>
+	</query>
+
+	<query name="SessionTemplate.findSessionTemplatesByDeviceId">
+		 <![CDATA[
+      	select sessionTemplate
+      	from Device device
+      		join device.sessionTemplates sessionTemplate
+      	where device.deviceId = :deviceId
+       ]]>
+	</query>
+
+	<query name="UserProfile.findUserByUsername">
+		 <![CDATA[
+      	select userProfile 
+      		from UserProfile userProfile
+      	where userProfile.username = :username  
+       ]]>
+	</query>
+</hibernate-mapping> 
+

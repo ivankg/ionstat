@@ -1,0 +1,584 @@
+/* Top Elements */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #EBF2FF;
+	font: 70%/1.5em Verdana, Tahoma, arial, sans-serif;
+	color: #555;
+	margin-top: 5px;
+}
+
+#wrap {
+	/* width: 1250px; */
+	margin: 0 auto;
+	text-align: left;
+}
+/********************************************
+   LAYOUT
+********************************************/
+
+#rightTopPanel {
+	position: absolute;
+	left: 302px;
+	top: 75px;
+}
+
+#leftTopPanel {
+	width: 280px;
+	overflow-y: auto;
+	overflow-x: auto;
+	height: 290px;
+	padding: 10px;
+	background: #fafafa;
+	border-bottom: 2px;
+	border-top: 10px;
+	border-left: 2px;
+	border-right: 2px;
+	border-style: groove;
+	border-color: #CED9E7;
+}
+
+#leftBottomPanel {
+	width: 250px;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#rightTopPanel {
+	width: 997px;
+	overflow-y: auto;
+	overflow-x: auto;
+	height: 310px;
+	background: #fafafa;
+	border-bottom: 2px;
+	border-top: 10px;
+	border-left: 2px;
+	border-right: 2px;
+	border-style: groove;
+	border-color: #CED9E7;
+}
+/* Footer */
+#footer {
+	margin-bottom: 20px;
+	color: #C6DDEE;
+	background: #959FA8;
+	background-size: contain;
+	clear: both;
+	width: 100%;
+	text-align: center;
+	font-size: 92%;
+	-webkit-border-top-left-radius: 0px;
+	-webkit-border-top-right-radius: 0px;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	box-shadow: 0px 5px 9px -3px #000000;
+}
+
+#footer a {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#create-user {
+	margin-bottom: 8px;
+}
+
+#tree {
+	horisontal-align: left;
+}
+
+#mask {
+	height: 100%;
+	width: 100%;
+	display: none;
+	background: #000;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	opacity: 0.4;
+	z-index: 1000;
+}
+
+#addSessionDialog {
+	height: 250px;
+	display: none;
+	position: fixed;
+	width: 450px;
+	background: #fafafa;
+	top: 30%;
+	right: 30%;
+	left: 35%;
+	bottom: 10%;
+	z-index: 1500;
+}
+
+/*
+	component of add new session dialog
+*/
+#addNewSessionDialog {
+	height: 700px;
+	display: none;
+	position: fixed;
+	width: 600px;
+	background: #fafafa;
+	top: 2%;
+	right: 20%;
+	left: 25%;
+	bottom: 10%;
+	z-index: 1500;
+}
+
+#confirmButton_addNewSession {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 20%;
+}
+
+#cancelBtn_addNewSession {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 2%;
+}
+
+#closeBtn_addNewSession {
+	height: 15px;
+	cursor: pointer;
+	position: absolute;
+	width: 15px;
+	background: red;
+	text-align: center;
+	font-seze: 16px;
+	font-weight: bold;
+	color: #000;
+	top: -2%;
+	right: -1%;
+}
+
+/*
+	component of approve decline session dialog
+*/
+#approveDeclineDialog {
+	height: 250px;
+	display: none;
+	position: fixed;
+	width: 350px;
+	background: #fafafa;
+	top: 30%;
+	right: 20%;
+	left: 35%;
+	bottom: 10%;
+	z-index: 1500;
+}
+
+#approveButton {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 42%;
+}
+
+#declineButton {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 22%;
+}
+#cancelApproveDecline {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 2%;
+}
+
+#headerText-approveDecline {
+	text-align: center;
+	font-seze: 16px;
+	font-weight: bold;
+	margin-top: 10px;
+	padding-bottom: 20px;
+}
+/*
+	component of add child dialog
+*/
+#addChildDialog {
+	height: 330px;
+	display: none;
+	position: fixed;
+	width: 380px;
+	background: #fafafa;
+	top: 10%;
+	right: 30%;
+	left: 35%;
+	bottom: 10%;
+	z-index: 1500;
+}
+
+.citiesForm {
+	width: 200px;
+	background: #ECF3FF;
+	margin-left: 60px;
+}
+
+#confirmButton_addChildDialog {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 20%;
+}
+
+#cancelBtn_addChildDialog {
+	height: 20px;
+	width: 60px;
+	position: absolute;
+	background: #EFEFEF;
+	text-align: center;
+	font-seze: 16px;
+	color: #000;
+	bottom: 2%;
+	right: 2%;
+}
+
+#closeBtn_addChildDialog {
+	height: 15px;
+	cursor: pointer;
+	position: absolute;
+	width: 15px;
+	background: red;
+	text-align: center;
+	font-seze: 16px;
+	font-weight: bold;
+	color: #000;
+	top: -2%;
+	right: -2%;
+}
+
+#headerPanel {
+	height: 1px;
+	position: absolute;
+	width: 380px;
+	border-bottom: 2px;
+	background: #000;
+	text-align: center;
+	color: #fff;
+}
+
+#headerText {
+	text-align: center;
+	font-seze: 16px;
+	font-weight: bold;
+	margin-top: 10px;
+	padding-bottom: 20px;
+}
+
+/*
+Add new session dialog component
+*/
+#UploadFileForm {
+	margin-top: 40px;
+	display: none;
+}
+
+#UploadFileChooseFile {
+	margin-left: 20px;
+}
+
+#UploadFileSubmit {
+	margin-left: 40px;
+	margin-top: 20px;
+}
+
+.nominalGridUi {
+	margin-left: 20px;
+	margin-top: 10px;
+}
+
+.nominalGridUi-body {
+}
+
+#basicTable {
+	margin-left: 20px;
+	margin-top: 20px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 14px;
+	color: #404040;
+	width: 300px;
+	background-color: #fafafa;
+	border: 1px #000 solid;
+	border-spacing: 0px;
+}
+
+#basicTable td.columnText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: left;
+	text-indent: 5px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#basicTable td.headerText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: center;
+	text-align: left;
+	text-indent: 5px;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#basicTable td.columnsClass {
+	border-bottom: 1px solid #000;
+	border-top: 0px;
+	border-left: 1px solid #000;
+	border-right: 0px;
+	text-align: left;
+	text-align: center;
+	text-indent: 10px;
+	font-family: Verdana, sans-serif, Arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #404040;
+	background-color: #fafafa;
+}
+
+#recordedTable {
+	margin-left: 20px;
+	margin-top: 10px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 14px;
+	color: #404040;
+	width: 560px;
+	background-color: #fafafa;
+	border: 1px #000 solid;
+	border-spacing: 0px;
+}
+
+#recordedTable {
+	position: absolute;
+}
+
+#recordedTable td.columnText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: left;
+	text-indent: 5px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#recordedTable td.recordedTableHeaderText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: center;
+	text-align: left;
+	text-indent: 5px;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#recordedTable td.columnsClass {
+	border-bottom: 1px solid #000;
+	border-top: 0px;
+	border-left: 1px solid #000;
+	border-right: 0px;
+	text-align: left;
+	text-align: center;
+	text-indent: 10px;
+	font-family: Verdana, sans-serif, Arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #404040;
+	background-color: #fafafa;
+}
+
+/********************************************
+   Login
+********************************************/
+#loginDialog {
+	height: 200px;
+	position: fixed;
+	width: 300px;
+	background: #fafafa;
+	top: 30%;
+	right: 30%;
+	left: 35%;
+	bottom: 10%;
+	z-index: 1500;
+}
+
+
+/********************************************
+   session infos
+********************************************/
+
+#sessionTemplateInfoGrid {
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 14px;
+	color: #404040;
+	width: 400px;
+	background-color: #fafafa;
+	border: 1px #000 solid;
+	border-spacing: 0px;
+}
+
+#sessionTemplateInfoGrid td.columnText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: left;
+	text-indent: 5px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#sessionTemplateInfoGrid td.headerText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: center;
+	text-align: left;
+	text-indent: 5px;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#sessionTemplateInfoGrid td.columnsClass {
+	border-bottom: 1px solid #000;
+	border-top: 0px;
+	border-left: 1px solid #000;
+	border-right: 0px;
+	text-align: left;
+	text-align: center;
+	text-indent: 10px;
+	font-family: Verdana, sans-serif, Arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #404040;
+	background-color: #fafafa;
+}
+
+#measurementInfoGrid {
+	margin-left: 392px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 14px;
+	color: #404040;
+	width: 850px;
+	background-color: #fafafa;
+	border: 1px #000 solid;
+	border-spacing: 0px;
+}
+
+#measurementInfoGrid {
+	position: absolute;
+	left: 10px;
+	top: 50px;
+}
+
+#measurementInfoGrid td.columnText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: left;
+	text-indent: 5px;
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#measurementInfoGrid td.headerText {
+	border-bottom: 2px solid #000;
+	border-left: 1px solid #000;
+	background-color: #F0F0F1;
+	text-align: center;
+	text-align: left;
+	text-indent: 5px;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+}
+
+#measurementInfoGrid td.columnsClass {
+	border-bottom: 1px solid #000;
+	border-top: 0px;
+	border-left: 1px solid #000;
+	border-right: 0px;
+	text-align: left;
+	text-align: center;
+	text-indent: 10px;
+	font-family: Verdana, sans-serif, Arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #404040;
+	background-color: #fafafa;
+}

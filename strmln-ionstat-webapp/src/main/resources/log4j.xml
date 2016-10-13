@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender class="org.apache.log4j.net.SMTPAppender" name="mail">
+
+		<param value="1" name="BufferSize" />
+		<param value="noreply@transperfect.com" name="From" />
+		<param value="localhost" name="SMTPHost" />
+
+		<!-- <param value="enterSmtpUsername" name="SMTPUsername" /> <param name="SMTPPassword" 
+			value="smtpPassword"/> -->
+
+		<param value="Application Error" name="Subject" />
+		<param value="ERROR" name="Threshold" />
+		<param value="errorreceivingmail@server.com" name="To" />
+		<layout class="org.apache.log4j.HTMLLayout" />
+
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="StringToMatch" value="Cannot watch directory" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="StringToMatch" value="Ignoring directory" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="StringToMatch" value="Cannot process file" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="StringToMatch" value="Unexpected error determining type of file" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="StringToMatch" value="Could not delete file" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+		<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="StringToMatch" value="Cannot move file" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+		<filter class="org.apache.log4j.varia.DenyAllFilter" />
+
+	</appender>
+
+	<appender class="org.apache.log4j.RollingFileAppender" name="pd">
+		<param value="UTF-8" name="encoding" />
+		<param value="${catalina.home}/log/pd.log" name="File" />
+		<param value="1" name="MaxBackupIndex" />
+		<param value="10000KB" name="MaxFileSize" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param value="%d %p [%c][%t][user:%X{username}] - &lt;%m&gt;%n"
+				name="ConversionPattern" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.ConsoleAppender" name="stdout">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param value="%d %p [%c][%t][user:%X{username}] - &lt;%m&gt;%n"
+				name="ConversionPattern" />
+		</layout>
+	</appender>
+
+	<logger name="jdbc.sqlonly">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.sqltiming">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.audit">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.resultset">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.connection">
+		<level value="error" />
+	</logger>
+
+	<logger name="org.hibernate">
+		<level value="error" />
+	</logger>
+
+	<logger name="org.apache.solr">
+		<level value="error" />
+	</logger>
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="stdout" />
+		<appender-ref ref="pd" />
+		<!-- <appender-ref ref="mail"/> -->
+	</root>
+
+</log4j:configuration>

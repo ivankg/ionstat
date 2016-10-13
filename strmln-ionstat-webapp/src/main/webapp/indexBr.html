@@ -1,0 +1,929 @@
+<!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Envision</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="scripts/css/Envision.css" type="text/css" />
+	<link rel="stylesheet" href="scripts/css/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="scripts/lib/jquery.js"></script>
+	<script type="text/javascript" src="scripts/lib/sendRequest.js"></script>
+	<script type="text/javascript" src="scripts/lib/jquery.form.js"></script>
+	<script type="text/javascript" src="scripts/lib/upload.js"></script>
+	<script type="text/javascript" src="scripts/lib/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="scripts/lib/jquery.ztree.exedit-3.5.js"></script>
+     <SCRIPT type="text/javascript">
+		var setting = {                       
+			async: {
+				enable: true,
+				url:"task.is",
+				type:"get",
+				autoParam:["id=id", "name=n", "level=lv"]
+				//otherParam:{"otherParam":"someData"},
+				//dataFilter: filter // ponedeljak 22072013
+			},
+			callback: {
+				beforeDblClick: zTreeBeforeDblClick,
+				onDblClick: onZTreeDblclick,
+				beforeClick: beforeClick,
+				onClick: onClick
+                /*beforeDrag: beforeDrag,
+				beforeEditName: beforeEditName,
+				beforeRemove: beforeRemove,
+				beforeRename: beforeRename,
+				onRemove: onRemove,
+				onRename: onRename */                                
+			},
+            view: {
+				addHoverDom: addHoverDom,
+				removeHoverDom: removeHoverDom,
+				selectedMulti: false
+			},
+			/*edit: {
+				enable: true,
+				editNameSelectAll: true,
+				showRemoveBtn: showRemoveBtn,
+				showRenameBtn: showRenameBtn
+			},*/
+                        
+			data: {
+			    /*keep:{
+				    leaf: true,
+					parent:true
+				},*/
+				simpleData: {
+					enable: true,
+					idKey: "id",
+					pIdKey: "pId",
+					rootPId: "null"
+				}
+			}
+                        
+		};
+		
+		var zNodes =[
+		    { id:"0", pId:0, name:"sites", open:true, isParent:true}		   
+		];
+                
+          
+		var log, className = "dark";
+		var klik;
+		var dblclick;
+		var timeout;
+                
+		function beforeClick(treeId, treeNode, clickFlag, ss) {
+			className = (className === "dark" ? "":"dark");
+			//showLog("[ "+getTime()+" beforeClick ]&nbsp;&nbsp;" + treeNode.name );
+                                              
+			test = document.getElementById('clicks').innerHTML;
+			//test = 'double';
+			if (test == 'double')
+				return false;
+			 else if (test == 'single')
+				return true;
+                                    
+			//return (treeNode.click != false);                           
+		}
+            
+		function onClick(event, treeId, treeNode, clickFlag) {
+			var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+			
+			var sNodes = treeObj.getSelectedNodes();
+			//alert(sNodes[0].name);
+			if (sNodes.length > 0) {
+					level = sNodes[0].level;
+					//var parentid = sNodes[0].parentTId;
+					var tid = sNodes[0].tId;
+					var id = tid.split("_")[0];  // Branko - posto je id = 2_number
+			}
+			
+			var task = "";
+			switch (level)
+			{
+				case 1:
+				  task = "getFacility";
+				  $("#mySessions .upload").css("display", "none");
+				  $("#leftSidebar .data").css("display", "none");
+				  $("#myTable").empty();
+				  $("#nominalTable").empty();
+				  break;
+				case 2:
+				  task = "getDepartment";
+				  $("#mySessions .upload").css("display", "none");
+				  $("#leftSidebar .data").css("display", "none");
+                  $("#myTable").empty();
+				  $("#nominalTable").empty();				  
+				  break;
+				case 3:
+				  task = "getRoom";
+				  $("#mySessions .upload").css("display", "none");
+				  $("#leftSidebar .data").css("display", "none");
+                  $("#myTable").empty();
+				  $("#nominalTable").empty();				  
+				  break;
+				case 4:
+				  task = "getDevice";			 
+				  break;
+			} 
+
+			var jsonData = '{"taskName":"' + task + '"}';
+		    var jsonTaskData = '{"id":"' + id + '"}';
+			branko(jsonData, jsonTaskData, sNodes[0].level, sNodes[0].name);
+        
+			//showLog("[ "+getTime()+" onClick ]&nbsp;&nbsp;clickFlag = " + clickFlag + " (" + (clickFlag===1 ? "single selected": (clickFlag===0 ? "<b>cancel selected</b>" : "<b>multi selected</b>")) + ")");
+		}              
+                
+		function zTreeBeforeDblClick(treeId, treeNode) {
+			return true;
+		};
+		
+		function onZTreeDblclick(event,treeId, treeNode){
+				// sa task.is
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes); 
+				// bez task.is
+				var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+		}
+
+		function showLog(str) {
+			if (!log) log = $("#log");
+			log.append("<li class='"+className+"'>"+str+"</li>");
+			if(log.children("li").length > 8) {
+				log.get(0).removeChild(log.children("li")[0]);
+			}
+		}
+		
+		function getTime() {
+			var now= new Date(),
+			h=now.getHours(),
+			m=now.getMinutes(),
+			s=now.getSeconds();
+			return (h+":"+m+":"+s);
+		}
+
+		function filter(treeId, parentNode, childNodes) {
+			if (!childNodes) return null;
+			for (var i=0, l=childNodes.length; i<l; i++) {
+				   childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+			}
+			
+			return childNodes;
+		}
+		
+		function getSession(){
+		   var id = $(this).attr("id");
+		   $.ajax({
+				type: "GET",
+				url: 'task.is',
+				data: 'jsonData={"taskName":"getSession"}&jsonTaskData={"id":"' + $(this).attr("id") + '"}',
+				dataType: "json",
+
+				//if received a response from the server
+				success: function(data) {					
+					jsontotable(data.taskInfo.responseModel.measurementInfo, "upload");
+					jsontotable(data.taskInfo.responseModel.sessionTemplateInfo, "nominal");
+					// highlight rows
+					$('span').removeClass("highlight");
+					$('span#'+ id.toString()).addClass("highlight");
+					// check user
+					if ($("#user-type").text() != "Operater"){
+					    $("#buttons").css("display", "block");
+					}
+					$("#sessionButton").css("display", "none");
+                    // check user -- with disabled buttons
+					//if ($("#user-type").text() == "Operater"){
+					    //$("#buttons").css("display", "block");
+					    //$("#approveButton").attr("disabled","disabled");
+						//$("#declineButton").attr("disabled","disabled");
+				    //}
+					$("#approveButton").attr("id",id);
+                    $("#declineButton").attr("id",id);					
+				},
+
+				//If there was no resonse from the server
+				error: function(jqXHR, textStatus, errorThrown){
+				    //alert("nece");
+					console.log("Something really bad happened " + textStatus);
+					$("#ajaxResponse").html(jqXHR.responseText);
+				},
+
+				//capture the request before it was sent to server
+				beforeSend: function(jqXHR, settings){
+					$('#myButton').attr("disabled", true);
+				}      
+			});   
+		}
+		
+		function getReport(){
+		   var id = $(this).attr("id");
+		   
+		   document.getElementById("downloadFrame").src = "download.is?id=" + id;
+		   // highlight
+		   $('span').removeClass("highlight");
+		   $('span#'+ id.toString()).addClass("highlight");
+		   
+		   /*$.ajax({
+				type: "GET",
+				url: 'download.is',
+				data: 'id=' + id,
+				dataType: "text",
+				contentType : 'application/pdf',
+
+				//if received a response from the server
+				success: function(data) {					
+		             					
+				},
+
+				//If there was no resonse from the server
+				error: function(jqXHR, textStatus, errorThrown){
+				    //alert("nece");
+					console.log("Something really bad happened " + textStatus);
+					$("#ajaxResponse").html(jqXHR.responseText);
+				},
+
+				//capture the request before it was sent to server
+				beforeSend: function(jqXHR, settings){
+					$('#myButton').attr("disabled", true);
+				}      
+			}); */ 
+		}
+                
+		function branko(jsonData,jsonTaskData, level, name){
+	
+			//meaning we are expecting JSON data in response from the server
+			$.ajax({
+				type: "GET",
+				url: 'task.is',
+				data: "jsonData=" + jsonData + "&jsonTaskData=" + jsonTaskData,
+				dataType: "json",
+
+				//if received a response from the server
+				success: function(data) {
+					  var dd = JSON.stringify(data);
+			          var json = JSON.parse(dd);
+					  // session storage
+					  if(typeof(Storage)!=="undefined")
+					  {						  
+						 sessionStorage.setItem('json', JSON.stringify(data));
+						 //sessionStorage.json=json;
+					  }
+					  
+					  //alert(sessionStorage.json);
+
+					  $("#myForm").empty();
+					  form = $("#myForm");
+					  //$form = $("<form id='stylized'></form>");
+					  //$('#formData').append($form);
+					 					  
+					 textFields = json.taskInfo.responseModel.entity;
+					 for (key in textFields) {
+						if (textFields.hasOwnProperty(key)) {
+							 input = document.createElement('input');
+							 input.id = key;
+							 input.value = textFields[key];
+							 
+							 label = document.createElement('label');
+							 newT = document.createTextNode(key);
+							 label.appendChild(newT);
+							 label.value = key;
+							 form.append(label);
+							 form.append(input);
+							 form.append('<br />');
+						 }
+				     }
+					 
+					$("#oldSessions").empty();
+					// previous sessions
+					legend = document.createElement('legend');
+					legend.innerHTML = "Previous sessions";
+					$("#oldSessions").append(legend);
+					radioButtonsList = json.taskInfo.responseModel.sessions;
+					if(typeof(radioButtonsList) != "undefined"){ 
+						for (j=0; j<radioButtonsList.length;j++){	 
+							//var p=document.createElement("p");
+							span = document.createElement('span');
+							var t=document.createTextNode(radioButtonsList[j].sessionPerformDate);
+							span.appendChild(t);
+							span.setAttribute("id", radioButtonsList[j].id); 
+							//$("#mySessions div.data").append(t);
+							// show button
+							$("#oldSessions").append(span);
+							input = document.createElement('input');
+							input.setAttribute("type", "button");
+							input.setAttribute("id", radioButtonsList[j].id);
+							input.setAttribute("value", "Show session");
+							input.setAttribute("class", "button");
+							input.addEventListener("click", getSession);
+							$("#oldSessions").append(input);
+	  
+							/*button = document.createElement('button');
+							button.setAttribute("type","submit");
+							t=document.createTextNode("Show session");
+							button.appendChild(t);
+							$("#mySessions").append(button);*/
+							
+							// report button
+							button = document.createElement('input');
+							button.setAttribute("type","button");
+						    button.setAttribute("id", radioButtonsList[j].id);
+							button.setAttribute("class", "button");
+							button.setAttribute("value", "View report");
+							button.addEventListener("click", getReport);
+							$("#oldSessions").append(button);
+							// delete button
+							button1 = document.createElement('input');
+							button1.setAttribute("type","button");
+						    button1.setAttribute("id", radioButtonsList[j].id);
+							button1.setAttribute("class", "button");
+							button1.setAttribute("value", "Delete");
+							button1.addEventListener("click", deleteSession);
+							$("#oldSessions").append(button1);
+							
+							$("#oldSessions").append("<br><br>");
+							/*input = document.createElement('input');
+							  input.setAttribute("type", "button");
+							  input.setAttribute("id", "ttj");
+							  input.setAttribute("value", "Save session");
+							  input.setAttribute("class", "button");
+							  input.addEventListener("click", savesession);
+							  //input.onclick = ajde();
+							  $("#excel").after(input);*/
+						 }
+						 
+						 /*$("#mySessions div.data").css("border","solid");
+					     $("#mySessions div.data").css("border-radius","10px");*/
+						 $("#leftSidebar div.data").css("padding","20px 0px");
+						 $("#leftSidebar div.data").css("margin-bottom","30px");
+						 $("#leftSidebar div.data").css("display","block");
+					     $("#mySessions div.upload").css("display","block");
+						 $("#myTable").empty();
+						 if ($("#user-type").text() == "Supervisor"){
+						     $("#btn").attr("disabled","disabled");
+						 }
+					 }
+					 
+					 if (typeof(radioButtonsList) != "undefined" && radioButtonsList.length == 0)
+                     {
+					     //message = document.createTextNode("There are not saved sessions");
+						 //message.setAttribute('style', 'fontWeight: bold');
+						 $("#oldSessions").append("<b>There are not saved sessions</b>");
+				     }					 
+                    
+					if (!$.isEmptyObject($.find('#dropdown'))){
+					    $("#dropdown").remove();
+						$('#uploadForm br').remove();
+					}
+
+					dropdownlist = json.taskInfo.responseModel.sessionTemplateInfos;
+					if(typeof(dropdownlist) != "undefined"){ 
+						numberOptions = json.taskInfo.responseModel.sessionTemplateInfos.length;
+						select = document.createElement("select");
+						select.id = "dropdown";
+						select.onchange = dropOnChange;
+						// show default table on load
+						showTable = json.taskInfo.responseModel.sessionTemplateInfos[0].measurementInfo;	
+						jsontotable(showTable, "nominal");
+			   
+						for(k = 0;k < numberOptions; k++){
+							option = document.createElement("option");
+							option.value = dropdownlist[k].sessionTemplateId;
+							option.text = dropdownlist[k].name;
+							select.appendChild(option);
+						}	                  				
+						
+						$("#mySessions button").after(select);
+						$("#mySessions button").after("<br /><br />");
+						
+						if ($("#user-type").text() == "Supervisor"){
+							 $("#dropdown").attr("disabled","disabled");
+						 }
+						
+						// templateId for upload
+						s = $(this + "option:selected").val();
+						uploadTemplate = '{"sessionTemplateId":' + s + '}';
+                        $("#uploadTemplateId").val(uploadTemplate);
+                    }					
+					
+					var task = "";
+					switch (level)
+					{
+						case 1:
+						  task = "Facility: ";
+						  break;
+						case 2:
+						  task = "Department: ";
+						  break;
+						case 3:
+						  task = "Room: ";
+						  break;
+						case 4:
+						  task = "Device: ";
+						  break;
+					} 
+					
+					message = task + name;
+					$("#success").html(message);
+					
+				},
+
+				//If there was no resonse from the server
+				error: function(jqXHR, textStatus, errorThrown){
+					console.log("Something really bad happened " + textStatus);
+					$("#ajaxResponse").html(jqXHR.responseText);
+				},
+
+				//capture the request before it was sent to server
+				beforeSend: function(jqXHR, settings){
+					//adding some Dummy data to the request
+					//settings.data += "&dummyData=addFacility";
+					//disable the button until we get the response
+					$('#myButton').attr("disabled", true);
+				}      
+			});    
+		};
+		
+		function dropOnChange(){
+		   // alert($(this + "option:selected").index());
+		   // $(this + "option:selected").val();
+           s = $(this + "option:selected").val();		   
+		   uploadTemplate = '{"sessionTemplateId":' + s + '}';
+           $("#uploadTemplateId").val(uploadTemplate);
+		   
+		   k = $(this + "option:selected").index();
+		   var json = JSON.parse(sessionStorage.getItem('json'));
+		   //dropdown = json.taskInfo.responseModel.sessionTemplateInfos;		   
+           showTable = json.taskInfo.responseModel.sessionTemplateInfos[parseInt(k)].measurementInfo;	
+		   //alert(showTable);
+           jsontotable(showTable, "nominal");		   
+		}
+				
+		// constructors
+		function facility(name,city, address, contactPerson, email, phone, pib)
+		{
+			this.name=name;
+			this.city=city;
+			this.address=address;
+			this.contactPerson = contactPerson;
+			this.email = email;
+			this.phone = phone;
+			this.pib = pib;
+		}
+		
+		function department(name)
+		{
+			this.name=name;
+		}
+		
+		function room(name,inspectionInterval)
+		{
+			this.name=name;
+			this.inspectionInterval=inspectionInterval;
+		}
+		
+		function device(name,manufacturer, model, serialNumber, deviceUsage)
+		{
+			this.name=name;
+			this.manufacturer=manufacturer;
+			this.model=model;
+			this.serialNumber = serialNumber;
+			this.deviceUsage = deviceUsage;
+		}
+		
+		function iterate(form,object, task, parentid){
+		    form.attr("class", task);
+			input = document.createElement('input');
+			input.type = "hidden";
+			input.className = "new";
+			input.setAttribute("id", "parentId");  //var id = tid.split("_")[0];
+			input.value = parentid.split("_")[0];
+			form.append(input);
+		    for(var propt in object){
+				//alert(propt + ': ' + person[propt]);
+				//text field
+				label = document.createElement('label');
+				newT = document.createTextNode(propt);
+				label.appendChild(newT);
+				//label.value = key;							 
+				form.append(label);
+				// input field
+				input = document.createElement('input');
+				input.className = "new";
+				input.value = object[propt];
+				input.setAttribute("id", propt);			    
+				form.append(input);
+			    form.append("<br />");
+			}
+			button = document.createElement('button');
+			button.setAttribute("type","submit");
+			button.style.float = "right";
+			t=document.createTextNode("Save record");
+            button.appendChild(t);
+			//button.type = "button";
+			//button.value = "sacuvaj";	
+            //button.addEventListener("onclick",takeAndSave(task, parentid));			
+			//button.onclick = takeAndSave(task,parentid);
+			form.append(button);
+		}
+		
+		function takeAndSave(){
+			var task = $("#myForm").attr("class");
+			var tt = $('#address').val();
+			//alert(formData);
+		    var input_list = $(":input.new");
+			//alert(input_list);
+            var json = '{'; //parentId":' + '"' + parentId + '",';
+			for(var i = 0; i < input_list.length-1; i++) {
+				json = json + '"' + input_list[i].getAttribute('id') + '"' + ":";
+                json = json + '"' + input_list[i].value + '"' + ",";
+			}
+			json = json + '"' + input_list[input_list.length-1].getAttribute('id') + '"' + ":";
+            json = json + '"' + input_list[input_list.length-1].value + '"';
+			json = json + "}";
+
+			jsonData = '{"taskName":"' + task + '"}';
+            
+			var options = { 
+				//target:        '#output2',   // target element(s) to be updated with server response	
+				//beforeSubmit:  showRequest,  // pre-submit callback	   
+				success:       refreshNode,  // post-submit callback 
+				//data: {},
+				url: 'task.is',         // override for form's 'action' attribute 
+				type: 'POST'        // 'get' or 'post', override for form's 'method' attribute 
+			}; 
+			
+			options.data = {}; 
+			//addNew.jsonData.taskName = "addNewFacility";
+			options.data.jsonData = jsonData;
+			options.data.jsonTaskData = json;
+			//alert(options.data.jsonData.taskName);
+			return options;
+		}
+		
+		function refreshNode(){
+		    var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+			var nodes = treeObj.getSelectedNodes();
+			
+			if (nodes.length > 0) {
+			   //treeObj.reAsyncChildNodes(null, "refresh");
+			   treeObj.reAsyncChildNodes(nodes[0], "refresh", true);	   
+			}
+			
+			treeObj.cancelSelectedNode(nodes[0]);
+			
+		}
+                
+		// edit part of menu
+		var newCount = 1;
+		function addHoverDom(treeId, treeNode) {
+			var sObj = $("#" + treeNode.tId + "_span");
+            //alert(getNodeId(setting, treeNode));
+			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+			if (treeNode["level"]!=4)
+			   var addStr = "<span class='button add' id='addBtn_" + treeNode.tId + "' title='add node' onfocus='this.blur();'></span>";
+			sObj.after(addStr);
+		
+			var btn = $("#addBtn_"+treeNode.tId);
+			if (btn) btn.bind("click", function(){
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				if (treeNode != null)
+			        zTree.selectNode(treeNode);
+				zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+				var formName = "";
+				var formica = $("#myForm");
+				switch (treeNode.level)
+				{
+					case 0:
+					  formica.empty();
+					  facility = new facility("","","","","","","");
+					  task = "addNewFacility";
+					  iterate(formica, facility, task, treeNode.tId);                      					  
+					  break;
+					case 1:
+					  formica.empty();
+					  department = new department("");
+					  task = "addNewDepartment";
+					  iterate(formica, department, task, treeNode.tId);                      					  
+					  break;
+					case 2:
+					  formica.empty();
+					  room = new room("","");
+					  task = "addNewRoom";
+					  iterate(formica, room, task, treeNode.tId);                      					  
+					break;
+					  case 3:
+					  formica.empty();
+					  device = new device("","","","","");
+					  task = "addNewDevice";
+					  iterate(formica, device, task, treeNode.tId);                      					  
+					  break;
+				} 
+			
+                return false;                
+				
+			});
+		};
+		
+		function removeHoverDom(treeId, treeNode) {
+			$("#addBtn_"+treeNode.tId).unbind().remove();
+		};
+                               
+		function showRemoveBtn(treeId, treeNode) {
+			return !treeNode.isFirstNode;
+		}
+		
+		function showRenameBtn(treeId, treeNode) {
+			return !treeNode.isLastNode;
+		}
+                
+        function onRemove(e, treeId, treeNode) {
+			//showLog("[ "+getTime()+" onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+		}
+                
+        function onRename(e, treeId, treeNode, isCancel) {
+			//showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
+		}
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		}); 
+
+     /*function test() { 
+	    //alert("hjdjdfj");
+        // inside event callbacks 'this' is the DOM element so we first 
+        // wrap it in a jQuery object and then invoke ajaxSubmit 
+        $("#myForm").ajaxSubmit(takeAndSave()); 
+ 
+        // !!! Important !!! 
+        // always return false to prevent standard browser submit and page navigation 
+        return false; 
+    };	*/
+
+    	
+	
+	</SCRIPT>
+        <style type="text/css">
+            .ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+	</style>
+</head>
+<body onload="checkUser()">
+<div class="Blur" id="wrap">
+<div id="top-nav">
+	<ul>
+		<li id="log">Ulogovani ste:</li>
+		<li id="user-type"></li>
+		<li id="user"></li>
+		<li id="logout"><a href="http://localhost:8081/strmln-ionstat/index.html" onclick="Logout()">Logout</a></li>
+	</ul>
+</div>
+  <div id="header">
+    <h1 id="logo-text">Vinca Institute of Nuclear Sciences</h1>
+    <!--<h2 id="slogan">Vinca Institute of Nuclear Sciences</h2>
+    <div id="header-links">
+      <p> <a href="http://www.free-css.com/">Home</a> | <a href="http://www.free-css.com/">Contact</a> | <a href="http://www.free-css.com/">Site Map</a> </p>
+    </div> -->
+  </div>
+  <div id="content-wrap">
+    <!-- Sidebar -->
+	<div id="leftSidebar" class="oneCol"> 
+		<div id="sidebar">
+		  <div class="zTreeDemoBackground left">
+				<ul id="treeDemo" class="ztree"></ul>
+		  </div>	  
+		</div>
+		<div class="data" style="display:none">
+			  <fieldset style="border:solid;padding:20px;" id="oldSessions">
+			  </fieldset>
+			  <iframe src="" id="downloadFrame" name="iframe_a" frameborder="0" width="200" height="20" scrolling="no"></iframe>
+		</div>
+	</div>
+    <!-- Right content -->
+	<div id="main" class="twoCol"> 
+		 <a name="TemplateInfo"></a>	    
+		 <h1 id="success">DEMO Kragujevac</h1>
+		  <p id="clicks" style="visibility: hidden;">bb</p>
+
+		  <div id="formData" class="oneCol"> 
+			<div id="height">
+			   <form id="myForm">
+			   </form>
+			</div>
+		  </div>
+		  <div id="mySessions" class="twoCol">
+		   <div class="upload" id="upload" style="display:none;max-width:400px">
+			 <form id="uploadForm" method="post" enctype="multipart/form-data"  action="#">
+				<fieldset style="border:solid;padding:20px;">
+				  <legend>Upload new session</legend>
+					<input type="hidden" name="jsonData" value='{"taskName":"uploadSession"}' />
+					<input type="hidden" id="uploadTemplateId" name="jsonTaskData" value="" />
+					<input type="file" name="images" id="images" multiple />
+					<button type="submit" id="btn">Upload File!</button>
+				</fieldset>					
+			  </form>
+		  </div>
+		</div>	
+	    
+		<div class="clear"></div>
+       
+		<div id="myTable" style="margin-left:40px;margin-bottom:40px;" class="oneCol"></div>
+		<div id="nominalTable" style="margin-bottom:40px;" class="twoCol"></div>
+	  
+    </div>	
+  		
+  </div>
+  
+  <div id="footer">
+    <p> &copy; 2013 <strong>Vinca</strong> | Design by: <a href="">banex</a> | Valid <a href="http://validator.w3.org/check?uri=referer">XHTML</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.free-css.com/">Home</a>&nbsp;|&nbsp; <a href="http://www.free-css.com/">Sitemap</a>&nbsp;|&nbsp; <a href="http://www.free-css.com/">RSS Feed</a> </p>
+  </div>
+</div>
+<div class="BodyLogovanje" style="display:none;"></div>
+    <div class="Logovanje" style="display:none;">
+        <h1>Login</h1>
+        <form id="Login" action="#">
+            <input type="text" name="KorisnickoIme" id="username" placeholder="Username">
+            <input type="password" name="sifra" id="password" placeholder="Password">
+			<p id="wrong" style="display:none">Login failed.</p>
+            <button>Uloguj se</button>
+        </form>
+
+<script>
+var queryString;
+// prepare the form when the DOM is ready 
+$(document).ready(function() { 
+	
+   var options = { 
+		type: "POST",
+		url: "task.is",
+		dataType: 'json',
+		//data: "jsonTaskData=" + '{"sessionTemplateId":1}',
+		success: function(data) {
+			//var d = JSON.stringify(data);
+			jsontotable(data.taskResponse.model.measurementInfo, "upload");
+		    // visibility
+			$("#buttons").empty();
+			$("#buttons").css("display", "none");
+		    $("#sessionButton").css("display", "block");
+		},
+		error: ""
+	}; 
+    // bind form using ajaxForm 
+    $('#uploadForm').ajaxForm(options); 
+	
+	$('#myForm').submit(function() { 
+        // inside event callbacks 'this' is the DOM element so we first 
+        // wrap it in a jQuery object and then invoke ajaxSubmit 
+        $(this).ajaxSubmit(takeAndSave()); 
+        // !!! Important !!! 
+        // always return false to prevent standard browser submit and page navigation 
+        return false; 
+    }); 
+	
+	$('#formFacility').submit(function() { 
+        // inside event callbacks 'this' is the DOM element so we first 
+        // wrap it in a jQuery object and then invoke ajaxSubmit 
+        $(this).ajaxSubmit(takeAndSave()); 
+        // !!! Important !!! 
+        // always return false to prevent standard browser submit and page navigation 
+        return false; 
+    }); 
+	
+	$('#formDepartment').submit(function() { 
+        // inside event callbacks 'this' is the DOM element so we first 
+        // wrap it in a jQuery object and then invoke ajaxSubmit 
+        $(this).ajaxSubmit(takeAndSave()); 
+        // !!! Important !!! 
+        // always return false to prevent standard browser submit and page navigation 
+        return false; 
+    }); 
+	
+	$('#formRoom').submit(function() { 
+        // inside event callbacks 'this' is the DOM element so we first 
+        // wrap it in a jQuery object and then invoke ajaxSubmit 
+        $(this).ajaxSubmit(takeAndSave()); 
+        // !!! Important !!! 
+        // always return false to prevent standard browser submit and page navigation 
+        return false; 
+    });
+	
+});
+
+function showRequest(formData, jqForm, options) { 
+      queryString = "kkk";	
+      return true; 
+} 
+
+function checkUser(){
+    //alert(sessionStorage.getItem('user'));
+    if (sessionStorage.getItem('user-type') != ""){
+	    $("#user-type").text(sessionStorage.getItem('user-type'));
+        $("#user").text(sessionStorage.getItem('user'));
+        $('body #wrap').removeAttr("class");		
+	}
+	if ($("#user-type").text() == ""){
+	    $(".BodyLogovanje").css("display", "block");
+		$(".Logovanje").css("display", "block");
+	}   
+}
+
+function Logout(){
+    sessionStorage.setItem('user-type','');
+	sessionStorage.setItem('user','');
+	$("#user-type").text("");
+    $("#user").text("");
+	// refresh page
+	document.location.reload(true);
+}
+
+(function(){
+	var prozor = $(window);
+	var visina = prozor.height();
+	var sirina = prozor.width();
+	var Logovanje = $('.Logovanje');
+	var LogovanjeVisina = Logovanje.outerHeight();
+	var LogovanjeSirina = Logovanje.outerWidth();
+	var GornjaMargina = (visina - LogovanjeVisina)/2;
+	var LevaMargina = (sirina - LogovanjeSirina)/2;
+	var BodyLogovanje = $('.BodyLogovanje');
+	Logovanje
+	    .css('top',GornjaMargina)
+	    .css('left',LevaMargina);
+	BodyLogovanje
+		.css('width',sirina*2)
+		.css('height', visina*2);
+
+		$('.Logovanje button').click(function(){
+            user = $("#username").val();
+			pass = $("#password").val();
+			
+			if(user=="operater" && pass=="operater")
+			{
+			   $("#user-type").text("Operater");
+			   $("#user").text("operater");
+			   $('.BodyLogovanje').fadeOut(300);
+			   Logovanje.fadeOut(300);
+			   $('body #wrap').removeAttr("class");
+			   sessionStorage.setItem('user-type', 'Operater');
+			   sessionStorage.setItem('user', 'operater');
+			   return false;
+			} else if(user=="supervisor" && pass=="supervisor")
+			{
+			   $("#user-type").text("Supervisor");
+			   $("#user").text("supervisor");
+			   $('.BodyLogovanje').fadeOut(300);
+			   Logovanje.fadeOut(300);
+			   $('body #wrap').removeAttr("class");
+			   sessionStorage.setItem('user-type', 'Supervisor');
+			   sessionStorage.setItem('user', 'supervisor');
+			   return false;
+			} else if(user=="principal" && pass=="principal")
+			{
+			   $("#user-type").text("Principal");
+			   $("#user").text("principal");
+			   $('.BodyLogovanje').fadeOut(300);
+			   Logovanje.fadeOut(300);
+			   $('body #wrap').removeAttr("class");
+			   sessionStorage.setItem('user-type', 'Principal');
+			   sessionStorage.setItem('user', 'principal');
+			   return false;
+			} else{
+			   $("#wrong").css("display","block");
+			   return false;
+			} 
+			
+			/*$('.BodyLogovanje').fadeOut(300);
+			Logovanje.fadeOut(300);
+			$('body #wrap').removeAttr("class");
+			return false;*/
+		});
+
+})();
+
+       
+var alreadyclicked=false; 
+//$('#alreadyclicked').val('no click');
+$('ul').bind('click',function(){
+	
+	//var el=$(this);
+	if (alreadyclicked){
+		alreadyclicked=false; // reset
+		//$('#alreadyclicked').val('no click');
+		clearTimeout(alreadyclickedTimeout);  
+		$('#clicks').text('double');
+		//alert('double');           
+	}else{
+		alreadyclicked=true;
+		$('#alreadyclicked').val('clicked');
+		alreadyclickedTimeout=setTimeout(function(){
+			alreadyclicked=false; 
+			//$('#alreadyclicked').val('no click');
+			$('#clicks').text('single');
+			//alert('once');
+			//return test;
+		},300); // <-- dblclick tolerance here
+	}
+	return false;
+});
+
+
+  
+</script>
+</body>
+</html>

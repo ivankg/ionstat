@@ -1,0 +1,10 @@
+<Context sessionCookiePathUsesTrailingSlash="false">
+	<!-- mysql and log4jdbc driver -->
+	<!-- com.mysql.jdbc.Driver, net.sf.log4jdbc.DriverSpy -->
+
+	<Resource name="jdbc/ionstat" auth="Container" type="javax.sql.DataSource"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost/ionstat?useUnicode=true&amp;characterEncoding=UTF8"
+		username="is" password="is" />
+	<Manager pathname="" />
+</Context>

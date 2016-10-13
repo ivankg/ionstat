@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+ http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd ">
+
+	<bean id="taskManager"
+		class="org.strmln.ionstat.task.handler.manager.DefaultTaskManager">
+		<property name="taskHandlerMap">
+			<map>
+				<!-- ACTION TASKS -->
+				<entry key="addNewFacility">
+					<bean class="org.strmln.ionstat.task.handler.AddFacilityTaskHandler">
+						<property name="policy" value="POLICY_ADD_FACILITY" />
+					</bean>
+				</entry>
+				<entry key="addNewDepartment">
+					<bean class="org.strmln.ionstat.task.handler.AddDepartmentTaskHandler">
+						<property name="policy" value="POLICY_ADD_DEPARTMENT" />
+					</bean>
+				</entry>
+				<entry key="addNewRoom">
+					<bean class="org.strmln.ionstat.task.handler.AddRoomTaskHandler">
+						<property name="policy" value="POLICY_ADD_ROOM" />
+					</bean>
+				</entry>
+				<entry key="addNewDevice">
+					<bean class="org.strmln.ionstat.task.handler.AddDeviceTaskHandler">
+						<property name="policy" value="POLICY_ADD_DEVICE" />
+					</bean>
+				</entry>
+				<entry key="uploadSession">
+					<bean class="org.strmln.ionstat.task.handler.UploadSessionTaskHandler">
+						<property name="policy" value="POLICY_CREATE_SESSION" />
+					</bean>
+				</entry>
+				<entry key="createSession">
+					<bean class="org.strmln.ionstat.task.handler.CreateSessionTaskHandler">
+						<property name="policy" value="POLICY_CREATE_SESSION" />
+					</bean>
+				</entry>
+				<entry key="approveSession">
+					<bean class="org.strmln.ionstat.task.handler.ApproveSessionTaskHandler">
+						<property name="policy" value="POLICY_APPROVE_SESSION" />
+					</bean>
+				</entry>
+				<entry key="deleteSession">
+					<bean class="org.strmln.ionstat.task.handler.DeleteSessionTaskHandler">
+						<property name="policy" value="POLICY_DELETE_SESSION" />
+					</bean>
+				</entry>
+				<entry key="downloadReport">
+					<bean class="org.strmln.ionstat.task.handler.DownloadReportTaskHandler">
+						<property name="policy" value="POLICY_DOWNLOAD_REPORT" />
+					</bean>
+				</entry>
+
+				<!-- SEARCH TASKS -->
+				<entry key="getFacilities">
+					<bean class="org.strmln.ionstat.task.handler.GetFacilitiesTaskHandler" />
+				</entry>
+				<entry key="getDepartments">
+					<bean class="org.strmln.ionstat.task.handler.GetDepartmentsTaskHandler" />
+				</entry>
+				<entry key="getRooms">
+					<bean class="org.strmln.ionstat.task.handler.GetRoomsTaskHandler" />
+				</entry>
+				<entry key="getDevices">
+					<bean class="org.strmln.ionstat.task.handler.GetDevicesTaskHandler" />
+				</entry>
+				<entry key="getFacility">
+					<bean class="org.strmln.ionstat.task.handler.GetFacilityTaskHandler" />
+				</entry>
+				<entry key="getDepartment">
+					<bean class="org.strmln.ionstat.task.handler.GetDepartmentTaskHandler" />
+				</entry>
+				<entry key="getRoom">
+					<bean class="org.strmln.ionstat.task.handler.GetRoomTaskHandler" />
+				</entry>
+				<entry key="getDevice">
+					<bean class="org.strmln.ionstat.task.handler.GetDeviceTaskHandler" />
+				</entry>
+				<entry key="getSession">
+					<bean class="org.strmln.ionstat.task.handler.GetSessionTaskHandler" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+</beans>

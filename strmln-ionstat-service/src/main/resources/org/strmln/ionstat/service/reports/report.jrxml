@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f2f80fc-5f3b-46cb-b42f-4ffe51dd762f">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="329"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="Table Dataset 1" whenResourceMissingType="Error" uuid="376453f1-5cb6-4a6b-b531-ef5b852f1326">
+		<parameter name="sessionIdInternal" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+	f.`NAME` AS facilityName,
+	f.`CITY`,
+	f.ADDRESS,
+	dep.`NAME` AS departmentName,
+	r.`NAME` AS roomName,
+	dev.`NAME` AS deviceName,
+	dev.MODEL,
+	dev.MANUFACTURER, dev.SERIAL_NUMBER, s.SESSION_ID
+FROM
+	FACILITY f
+LEFT JOIN DEPARTMENT dep ON dep.FACILITY_ID = f.FACILITY_ID
+LEFT JOIN ROOM r ON r.DEPARTMENT_ID = dep.DEPARTMENT_ID
+LEFT JOIN DEVICE dev ON dev.ROOM_ID = r.ROOM_ID
+LEFT JOIN `SESSION` s ON s.DEVICE_ID = dev.DEVICE_ID
+WHERE
+	s.SESSION_ID = $P{sessionIdInternal}]]>
+		</queryString>
+		<field name="facilityName" class="java.lang.String"/>
+		<field name="CITY" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="ADDRESS" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="departmentName" class="java.lang.String"/>
+		<field name="roomName" class="java.lang.String"/>
+		<field name="deviceName" class="java.lang.String"/>
+		<field name="MODEL" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="MANUFACTURER" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="SERIAL_NUMBER" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="SESSION_ID" class="java.lang.Long">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<variable name="device" class="java.lang.String">
+			<variableExpression><![CDATA[$F{MANUFACTURER}.concat(", ").concat($F{MODEL}).concat(", ").concat($F{deviceName}).concat(", ").concat($F{SERIAL_NUMBER})]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="sessionId" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT m.MEASUREMENT_ID, measure.`NAME`, measure.UNIT, mvalue.DOUBLE_VALUE, mvalue.STRING_VALUE, s.COMMENT  FROM `SESSION` s
+LEFT JOIN MEASUREMENT m ON m.SESSION_ID = s.SESSION_ID
+LEFT JOIN MEASURED_VALUE mvalue ON mvalue.MEASUREMENT_ID = m.MEASUREMENT_ID
+LEFT JOIN MEASURE measure ON measure.MEASURE_ID = mvalue.MEASURE_ID
+where s.SESSION_ID = $P{sessionId}
+ORDER BY m.MEASUREMENT_ID, measure.`NAME`]]>
+	</queryString>
+	<field name="MEASUREMENT_ID" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="UNIT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DOUBLE_VALUE" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="STRING_VALUE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COMMENT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="Value" class="java.lang.Object">
+		<variableExpression><![CDATA[$F{STRING_VALUE} == null ? Double.valueOf(Math.round($F{DOUBLE_VALUE}*1000.0)/1000.0) : $F{STRING_VALUE}]]></variableExpression>
+	</variable>
+	<variable name="Header" class="java.lang.String">
+		<variableExpression><![CDATA[$F{NAME}.concat("\n").concat("(").concat( $F{UNIT} ).concat(")")]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="248" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b1c7c514-5933-4dea-9a48-bc6bf69f3f67" x="0" y="9" width="572" height="38"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUT ZA NUKLEARNE NAUKE "VINCA"
+Laboratorija za zastitu od zracenja i zastitu zivotne sredine
+Laboratorija za radijaciona merenja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a4c03169-2eea-492a-88a6-f73f53c34a0a" x="186" y="62" width="200" height="19"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IZVESTAJ O ISPITIVANJU]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="5176441f-1c81-4a78-907c-abadf898f13e" key="table 2" x="0" y="94" width="572" height="140"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="d39ed7c4-02ad-40f2-a993-72a6709cf944">
+						<datasetParameter name="sessionIdInternal">
+							<datasetParameterExpression><![CDATA[$P{sessionId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="120" uuid="8149aaf4-b9e5-4278-b872-c3da28212e56">
+						<jr:tableHeader height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="e34596b6-18d4-4b24-a87f-8d3f030d34f3" x="0" y="0" width="120" height="30"/>
+								<textElement/>
+								<text><![CDATA[Podnosilac zahteva]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="1e6585e3-fd54-4f70-b270-45dd74c2ed5d" x="0" y="0" width="90" height="30"/>
+								<textElement/>
+								<text><![CDATA[Datum ispitivanja]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="3d3ca3da-24bf-4e77-81a1-5536b259b5af" x="0" y="0" width="90" height="30"/>
+								<textElement/>
+								<text><![CDATA[Broj sesije]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="fda99278-6f5d-4e45-a834-8c4ea1e52220" x="0" y="0" width="120" height="31"/>
+								<textElement/>
+								<text><![CDATA[Proizvodjac, model i serijski broj]]></text>
+							</staticText>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="267" uuid="d96b368c-b32d-4017-a2e5-13b227d03c83">
+						<jr:tableHeader height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="49259045-3880-4064-9512-c39e9fca67e4" stretchType="RelativeToBandHeight" x="0" y="0" width="104" height="15"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{facilityName}]]></textFieldExpression>
+							</textField>
+						</jr:tableHeader>
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="c94ec97e-97c5-49ef-9d5e-6643080609ce" x="0" y="0" width="267" height="30"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{SESSION_ID}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell height="31" rowSpan="1">
+							<textField>
+								<reportElement uuid="df6e4a3f-7b05-445e-b4e3-a8d7226d4e52" x="0" y="0" width="267" height="31"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$V{device}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</title>
+	<summary>
+		<band height="379" splitType="Stretch">
+			<crosstab>
+				<reportElement uuid="aecca16e-7732-4b1f-a091-074bb2423237" x="0" y="0" width="572" height="108"/>
+				<rowGroup name="MEASUREMENT_ID" width="30">
+					<bucket class="java.lang.Long">
+						<bucketExpression><![CDATA[$F{MEASUREMENT_ID}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F8F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement uuid="2e6dd215-7d62-4067-857f-ba1079c224d1" style="Crosstab Data Text" x="0" y="0" width="30" height="13"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$V{MEASUREMENT_ID}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="Header" height="30">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$V{Header}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F8F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement uuid="74cb8d29-ab70-4741-b6bb-b116e3ea5a30" style="Crosstab Data Text" x="0" y="0" width="77" height="30"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$V{Header}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents/>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="ValueMeasure" class="java.lang.Object">
+					<measureExpression><![CDATA[$V{Value}]]></measureExpression>
+				</measure>
+				<crosstabCell width="77" height="13">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="57e19d59-1ec7-43e7-a059-2708ef9b188e" style="Crosstab Data Text" x="0" y="0" width="77" height="13"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[""+$V{ValueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="MEASUREMENT_ID">
+					<cellContents backcolor="#BFBFFF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="cc2abb62-7a51-4ff0-a403-b43a042c8d0c" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[""+$V{ValueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="Header">
+					<cellContents backcolor="#BFBFFF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="3295cbe5-5c67-44b9-930a-387f113f9328" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[""+$V{ValueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="MEASUREMENT_ID" columnTotalGroup="Header">
+					<cellContents backcolor="#BFBFFF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="4db2fb2a-9981-4a4a-af65-5b0e4b909040" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[""+$V{ValueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<staticText>
+				<reportElement uuid="d9d47f9e-010a-46bf-a7e6-5189874c2e1a" x="0" y="312" width="149" height="20"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Izvestaj ovlascenog lica]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1c81a87e-a111-4631-94d6-6255d4b85a28" x="6" y="333" width="550" height="46"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{COMMENT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
