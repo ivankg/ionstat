@@ -19,6 +19,14 @@ import org.strmln.ionstat.task.handler.model.command.dto.DtoTaskHandlerCommand;
 
 public class GetDeviceTaskHandler extends AbstractTaskHandler {
 
+	private static final String SESSIONS_KEY = "sessions";
+	private static final String HEADER_INFOS_KEY = "headerInfos";
+	private static final String ENTITY_KEY = "entity";
+	private static final String TECHNICIAN_HEADER_INFO = "technician";
+	private static final String STATUS_HEADER_INFO = "status";
+	private static final String SESSION_TEMPLATE_HEADER_INFO = "sessionTemplate";
+	private static final String SESSION_PERFORM_DATE_HEADER_INFO = "sessionPerformDate";
+	private static final String SESSION_ID_HEADER_INFO = "sessionId";
 	@Autowired
 	private DeviceService _deviceService;
 
@@ -60,16 +68,16 @@ public class GetDeviceTaskHandler extends AbstractTaskHandler {
 		Device device = getDeviceService().findByIdWithSessionAndSessionTemplate(entityCommand.getId());
 
 		List<String> headerInfos = new ArrayList<>();
-		headerInfos.add("sessionId");
-		headerInfos.add("sessionPerformDate");
-		headerInfos.add("sessionTemplate");
-		headerInfos.add("status");
-		headerInfos.add("technician");
+		headerInfos.add(SESSION_ID_HEADER_INFO);
+		headerInfos.add(SESSION_PERFORM_DATE_HEADER_INFO);
+		headerInfos.add(SESSION_TEMPLATE_HEADER_INFO);
+		headerInfos.add(STATUS_HEADER_INFO);
+		headerInfos.add(TECHNICIAN_HEADER_INFO);
 
 		TaskResponse response = new TaskResponse();
-		response.add("entity", DeviceConverter.fromInternalToDto(device));
-		response.add("headerInfos", headerInfos);
-		response.add("sessions", convertSessions(device.getSessions()));
+		response.add(ENTITY_KEY, DeviceConverter.fromInternalToDto(device));
+		response.add(HEADER_INFOS_KEY, headerInfos);
+		response.add(SESSIONS_KEY, convertSessions(device.getSessions()));
 
 		return response;
 	}

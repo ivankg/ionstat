@@ -15,6 +15,7 @@ import org.strmln.ionstat.task.handler.model.command.dto.DtoTaskHandlerCommand;
 
 public class GetDevicesTaskHandler extends AbstractTaskHandler {
 
+	private static final String ENTITIES_KEY = "entities";
 	@Autowired
 	private DeviceService _deviceService;
 
@@ -42,7 +43,7 @@ public class GetDevicesTaskHandler extends AbstractTaskHandler {
 				.convert(devices);
 
 		TaskResponse response = new TaskResponse();
-		response.add("entities", displayEntities);
+		response.add(ENTITIES_KEY, displayEntities);
 
 		return response;
 	}

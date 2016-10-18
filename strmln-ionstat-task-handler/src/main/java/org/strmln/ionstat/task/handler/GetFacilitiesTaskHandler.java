@@ -15,6 +15,7 @@ import org.strmln.ionstat.task.handler.model.command.dto.DtoTaskHandlerCommand;
 
 public class GetFacilitiesTaskHandler extends AbstractTaskHandler {
 
+	private static final String ENTITIES_KEY = "entities";
 	@Autowired
 	private FacilityService _facilityService;
 
@@ -41,7 +42,7 @@ public class GetFacilitiesTaskHandler extends AbstractTaskHandler {
 				.convert(facilities);
 
 		TaskResponse response = new TaskResponse();
-		response.add("entities", displayEntities);
+		response.add(ENTITIES_KEY, displayEntities);
 
 		return response;
 	}
