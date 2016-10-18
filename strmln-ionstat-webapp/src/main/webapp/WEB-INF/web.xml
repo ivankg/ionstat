@@ -32,7 +32,7 @@
 		<param-value>
 			classpath:org/strmln/ionstat/dao/spring/applicationContext-hibernate.xml
 			classpath:org/strmln/ionstat/service/spring/applicationContext-service.xml
-			classpath:org/strmln/ionstat/service/spring/applicationContext-tasks.xml
+			classpath:org/strmln/ionstat/task/handler/spring/applicationContext-tasks.xml
 			classpath:org/strmln/ionstat/mvc/spring/applicationContext-mvc.xml
 			classpath:org/strmln/ionstat/mvc/spring/applicationContext-security.xml
 		</param-value>

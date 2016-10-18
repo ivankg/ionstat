@@ -29,7 +29,6 @@ public class Policy implements Serializable {
 
 	@Id
 	@Column(name = "POLICY_ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public String getPolicyId() {
 		return _policyId;
 	}

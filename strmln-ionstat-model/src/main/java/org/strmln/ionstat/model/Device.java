@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -82,7 +83,7 @@ public class Device extends AbstractNameHolder {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "DEVICE_ID")
+	@JoinTable(name = "DEVICE_SESSION_TEMPLATE", joinColumns = @JoinColumn(name = "DEVICE_ID"), inverseJoinColumns = @JoinColumn(name = "SESSION_TEMPLATE_ID"))
 	public Set<SessionTemplate> getSessionTemplates() {
 		return _sessionTemplates;
 	}
